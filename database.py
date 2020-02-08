@@ -7,40 +7,23 @@ class Student(object):
         self.prefList = prefList
         self.coursesList = coursesList
 
-@staticmethod
-def from_dict(source):
+   @staticmethod
+   def from_dict(source):
         # [START_EXCLUDE]
-        city = City(source[u'name'], source[u'state'], source[u'country'])
-
-        if u'capital' in source:
-            city.capital = source[u'capital']
-
-        if u'population' in source:
-            city.population = source[u'population']
-
-        if u'regions' in source:
-            city.regions = source[u'regions']
-
-        return city
+        s = Student(source[u'firstName'], source[u'lastName'], source[u'major'], source[u'year'], source[u'prefList'], source[u'coursesList'])
+        return s
         # [END_EXCLUDE]
 
     def to_dict(self):
         # [START_EXCLUDE]
         dest = {
-            u'name': self.name,
-            u'state': self.state,
-            u'country': self.country
+            u'firstName': self.firstName,
+            u'lastName': self.lastName,
+            u'major': self.major,
+            u'year': self.year,
+            u'prefList': self.prefList,
+            u'coursesList': self.coursesList		
         }
-
-        if self.capital:
-            dest[u'capital'] = self.capital
-
-        if self.population:
-            dest[u'population'] = self.population
-
-        if self.regions:
-            dest[u'regions'] = self.regions
-
         return dest
         # [END_EXCLUDE]
 
