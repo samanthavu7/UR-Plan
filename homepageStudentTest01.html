@@ -25,16 +25,67 @@
     <link href="homepageStudentTest01.css" rel="stylesheet">
 </head>
 <body class="text-center">
-    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-        <header class="masthead mb-auto">
-            <div class="inner">
-                <h3 class="masthead"-brand>Student Homepage</h3>
-                <nav class="nav nav-masthead justify-content-center">
-                    <a class="nav-link active" href="#">View Course Plan</a>
-                    <a class="nav-link" href="#">Set Preferences</a>
-                </nav>
-            </div>
-        </header>
+
+    <div id="myResourcesNav" class="leftsidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeResourcesNav()">&times;</a>
+        <h1>Resources</h1>
+        <a href="https://student.engr.ucr.edu/majors">Recommended Course Plans</a>
+        <a href="https://www1.cs.ucr.edu/undergraduate/course-listings/">Course Offerings</a>
+        <a href="http://studentbcoe.ucr.acsitefactory.com/sites/g/files/rcwecm1536/files/2019-06/Breadth%20Requirements%206.12.19.pdf">Breadth Courses</a>
+        <a href="https://degreeworks.ucr.edu/dashboard/dashboard">Degree Audit</a>
+        <a href="https://calendar.google.com/calendar/r">Google Calendar</a>
     </div>
+
+    <div id="myPreferencesNav" class="rightsidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closePreferencesNav()">&times;</a>
+        <h1>Preferences</h1>
+        <h3>Days</h3>
+        <div class="checkbox">
+            <label><input type="checkbox" value="monday">Monday</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" value="tuesday">Tuesday</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" value="wednesday">Wednesday</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" value="thursday">Thursday</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" value="friday">Friday</label>
+        </div>
+    </div>
+
+    <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
+    <div id="main">
+        <h1 class="h3 mb-3 font-weight-normal">Welcome [StudentName]!</h1>
+        <button class="btn btn-secondary" type="submit" onclick="openResourcesNav()">Resources</button>
+        <button class="btn btn-secondary" type="submit" onclick="openPreferencesNav()">Preferences</button>
+        <img class="img-fluid" src="imgAssests/nusmods.png" alt="NUSMODS Screenshot">
+    </div>
+
+    <script>
+        /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
+        function openResourcesNav() {
+            document.getElementById("myResourcesNav").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+        function closeResourcesNav() {
+            document.getElementById("myResourcesNav").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+        function openPreferencesNav() {
+            document.getElementById("myPreferencesNav").style.width = "250px";
+            document.getElementById("main").style.marginRight = "250px";
+        }
+        function closePreferencesNav() {
+            document.getElementById("myPreferencesNav").style.width = "0";
+            document.getElementById("main").style.marginRight = "0";
+        }
+    </script>
+      
 </body>
 </html>
