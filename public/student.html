@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Student homepage Test</title>
+    <title>Student Homepage</title>
     <!--Setting the core Bootstrap CSS-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <meta name="theme-color" content="#563d7c">
@@ -22,13 +22,12 @@
             }
         }
     </style>
-    <link href="homepageStudentTest01.css" rel="stylesheet">
+    <link href="student.css" rel="stylesheet">
 </head>
 <body class="text-center">
-
     <div id="myResourcesNav" class="leftsidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeResourcesNav()">&times;</a>
-        <h1>Resources</h1>
+        <p-big>Resources</p-big><br>
         <a href="https://student.engr.ucr.edu/majors">Recommended Course Plans</a>
         <a href="https://www1.cs.ucr.edu/undergraduate/course-listings/">Course Offerings</a>
         <a href="http://studentbcoe.ucr.acsitefactory.com/sites/g/files/rcwecm1536/files/2019-06/Breadth%20Requirements%206.12.19.pdf">Breadth Courses</a>
@@ -38,23 +37,37 @@
 
     <div id="myPreferencesNav" class="rightsidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closePreferencesNav()">&times;</a>
-        <h1>Preferences</h1>
-        <h3>Days</h3>
-        <div class="checkbox">
-            <label><input type="checkbox" value="monday">Monday</label>
-        </div>
-        <div class="checkbox">
-            <label><input type="checkbox" value="tuesday">Tuesday</label>
-        </div>
-        <div class="checkbox">
-            <label><input type="checkbox" value="wednesday">Wednesday</label>
-        </div>
-        <div class="checkbox">
-            <label><input type="checkbox" value="thursday">Thursday</label>
-        </div>
-        <div class="checkbox">
-            <label><input type="checkbox" value="friday">Friday</label>
-        </div>
+        <p-big>Preferences</p-big><br>
+        
+        <p>Days</p>
+        <form>
+            <input type="checkbox" id="monday" name="monday" value="M">
+            <label for="monday">Monday</label><br>
+            <input type="checkbox" id="tuesday" name="tuesday" value="T">
+            <label for="tuesday">Tuesday</label><br>
+            <input type="checkbox" id="wednesday" name="wednesday" value="W">
+            <label for="wednesday">Wednesday</label><br>
+            <input type="checkbox" id="thursday" name="thursday" value="R">
+            <label for="thursday">Thursday</label><br>
+            <input type="checkbox" id="friday" name="friday" value="F">
+            <label for="friday">Friday</label><br>
+        </form> 
+        
+        <p>Time</p>
+        <form> 
+            <label for="startTime">Starting Time: </label>
+            <input type="time" id="startTime" value="07:00"><br>
+            <label for="endTime">Ending Time: </label>
+            <input type="time" id="endTime" value="22:00"><br>
+        </form>
+        
+        <p>Number of Classes</p>
+        <form> <!--action="/action_page.php"-->
+            <label for="quantity">Quantity: </label>
+            <input type="number" id="quantity" name="quantity" min="1" max="5" value="4"><br><br><br>
+        </form>
+
+        <input type="submit" value="Generate my Term Plan!">
     </div>
 
     <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
@@ -62,9 +75,9 @@
         <h1 class="h3 mb-3 font-weight-normal">Welcome [StudentName]!</h1>
         <button class="btn btn-secondary" type="submit" onclick="openResourcesNav()">Resources</button>
         <button class="btn btn-secondary" type="submit" onclick="openPreferencesNav()">Preferences</button>
-        <img class="img-fluid" src="imgAssests/nusmods.png" alt="NUSMODS Screenshot">
+        <iframe id="calendar" src="" style="border-width:0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
     </div>
-
+    
     <script>
         /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
         function openResourcesNav() {
@@ -72,20 +85,39 @@
             document.getElementById("main").style.marginLeft = "250px";
         }
 
-        /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
         function closeResourcesNav() {
             document.getElementById("myResourcesNav").style.width = "0";
             document.getElementById("main").style.marginLeft = "0";
         }
+
         function openPreferencesNav() {
             document.getElementById("myPreferencesNav").style.width = "250px";
             document.getElementById("main").style.marginRight = "250px";
         }
+
         function closePreferencesNav() {
             document.getElementById("myPreferencesNav").style.width = "0";
             document.getElementById("main").style.marginRight = "0";
         }
+
+        userEmail = "samanthavu.7@gmail.com";
+        document.getElementById("calendar").src = "https://www.google.com/calendar/embed?src=" + userEmail + "&ctz=America%2FLosAngeles";      
     </script>
-      
+
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="/__/firebase/7.9.3/firebase-app.js"></script>
+
+    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+    <script src="/__/firebase/7.9.3/firebase-analytics.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="/__/firebase/7.9.3/firebase-auth.js"></script>
+    <script src="/__/firebase/7.9.3/firebase-firestore.js"></script>
+
+    <!-- Initialize Firebase -->
+    <script src="/__/firebase/init.js"></script>
+
 </body>
 </html>

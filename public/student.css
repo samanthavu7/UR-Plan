@@ -31,15 +31,23 @@
   .leftsidenav a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
-    font-size: 25px;
+    font-size: 20px;
     color: #818181;
     display: block;
     transition: 0.3s;
     text-align: left;
   }
-  
-  /* The navigation menu links */
-  .rightsidenav .checkbox {
+
+  .rightsidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+
+  .rightsidenav form {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 15px;
@@ -49,11 +57,36 @@
     text-align: left;
   }
 
+  p {
+    padding: 8px 8px 0 32px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #f1f1f1;
+    display: block;
+    transition: 0.3s;
+    text-align: left;
+  }
+
+  p-big {
+    padding: 8px 8px 0px 32px;
+    text-decoration: none;
+    font-size: 30px;
+    color: #f1f1f1;
+    display: block;
+    transition: 0.3s;
+    text-align: left;
+    line-height: 100%;
+  }
+
   /* When you mouse over the navigation links, change their color */
   .leftsidenav a:hover {
     color: #f1f1f1;
   }
   
+  .rightsidenav a:hover {
+    color: #f1f1f1;
+  }
+
   /* Position and style the close button (top right corner) */
   .leftsidenav .closebtn {
     position: absolute;
@@ -75,6 +108,7 @@
   /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
   #main {
     transition: margin-left .5s;
+    transition: margin-right .5s;
     padding: 20px;
   }
   
