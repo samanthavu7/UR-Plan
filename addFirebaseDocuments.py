@@ -1,7 +1,7 @@
 #Function that adds documents to Firebase collection
 class Class(object):
     def __init__(self, courseName, classType, sectionNum, CRN, startTime, endTime, days,
-                classLoc, seatsOpen, seatsActual, creditAmt, prof,isUpperDiv, quarterOffered, preReqClasses=[], fulfillsReq=[]):
+                classLoc, seatsOpen, seatsActual, creditAmt, prof,isUpperDiv, quarterOffered, preReqClasses=[], preReqFor=[], fulfillsReq=[]):
         self.courseName = courseName
         self.classType = classType
         self.sectionNum = sectionNum
@@ -17,6 +17,7 @@ class Class(object):
         self.isUpperDiv = isUpperDiv
         self.quarterOffered = quarterOffered
         self.preReqClasses = preReqClasses
+        self.preReqFor = preReqFor
         self.fulfillsReq = fulfillsReq
 
     @staticmethod
@@ -24,7 +25,7 @@ class Class(object):
         
         c = Class(source[u'courseName'], source[u'classType'], source[u'sectionNum'], source[u'CRN'], source[u'startTime'],
                  source[u'endTime'], source[u'days'], source[u'classLoc'], source[u'seatsOpen'], source[u'seatsActual'], source[u'creditAmt'],
-                 source[u'prof'], source[u'isUpperDiv'], source[u'quarterOffered'], source[u'preReqClasses'], source[u'fulfillsReq'])
+                 source[u'prof'], source[u'isUpperDiv'], source[u'quarterOffered'], source[u'preReqClasses'], source[u'preReqFor'], source[u'fulfillsReq'])
         return c
         
 
@@ -46,19 +47,20 @@ class Class(object):
             u'isUpperDiv': self.isUpperDiv,
             u'quarterOffered': self.quarterOffered,
             u'preReqClasses': self.preReqClasses,
+            u'preReqFor': self.preReqFor,
             u'fulfillsReq': self.fulfillsReq
         }
         return dest
         
 
     def __repr__(self):
-        return(u'Class(courseName={}, classType={}, sectionNum={}, CRN={}, startTime={}, endTime={}, days={}, classLoc={}, seatsOpen={}, seatsActual={}, creditAmt={}, prof={}, isUpperDiv={}, quarterOffered={}, preReqClasses={}, fulfillsReq={})'
+        return(u'Class(courseName={}, classType={}, sectionNum={}, CRN={}, startTime={}, endTime={}, days={}, classLoc={}, seatsOpen={}, seatsActual={}, creditAmt={}, prof={}, isUpperDiv={}, quarterOffered={}, preReqClasses={}, preReqFor={}, fulfillsReq={})'
                .format(self.courseName, self.classType, self.sectionNum, self.CRN, self.startTime, self.endTime, self.days,
                       self.classLoc, self.seatsOpen, self.seatsActual, self.creditAmt, self.prof, self.isUpperDiv, 
-                      self.quarterOffered, self.preReqClasses, self.fulfillsReq))
+                      self.quarterOffered, self.preReqClasses, self.preReqFor, self.fulfillsReq))
 
 userOption = input("-----Press any key to enter new class. ('q' to quit)-----: ")
-if(userOption != 'q'):
+while(userOption != 'q'):
     className = input("Enter course name (Format as 'CS010' or 'BIOL005'): ")
     classCRN = input("Enter courseCRN: ")
     classCRN = int(classCRN)
@@ -87,15 +89,22 @@ if(userOption != 'q'):
     while(userOption3 != "q"):
         classPreReq.append(userOption3)
         userOption3 = input("Enter classPreReqs (CS010, CS100), if any (enter 'q' to quit):")
-    classFulfills = []
-    userOption4 = input("Enter requirements this class fulfills, if any (enter 'q' to quit): ")
+
+    classReqFor = []
+    userOption4 = input("Enter classes this class is a preReq. for, if any (enter 'q' to quit): ")
     while(userOption4 != "q"):
-        classFulfills.append(userOption4)
-        userOption4 = input("Enter requirements this class fulfills, if any (enter 'q' to quit): ")
+        classReqFor.append(userOption4)
+        userOption4 = input("Enter classes this class is a preReq. for, if any (enter 'q' to quit): ")
+
+    classFulfills = []
+    userOption5 = input("Enter requirements this class fulfills, if any (enter 'q' to quit): ")
+    while(userOption5 != "q"):
+        classFulfills.append(userOption5)
+        userOption5 = input("Enter requirements this class fulfills, if any (enter 'q' to quit): ")
     potentialClass = Class(courseName=className, classType=classTyping, sectionNum=classSection, CRN=classCRN, startTime=classStartTime, 
                            endTime=classEndTime, days=classDays, classLoc=classLocation, seatsOpen=classSeatsActual, seatsActual=classSeatsActual,
                            creditAmt=classCredit, prof=classProf, isUpperDiv=classUpperDiv, quarterOffered=classQuarters, preReqClasses=classPreReq,
-                           fulfillsReq=classFulfills)
+                           preReqFor=classReqFor,fulfillsReq=classFulfills)
     db.collection(u'classes').document(str(classCRN)).set(potentialClass.to_dict())
     print("Added new class to collection in Firebase.")
     userOption = input("+++++Press any key to enter another class. (or 'q' to quit)+++++: ")
