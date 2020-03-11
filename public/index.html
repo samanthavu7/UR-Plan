@@ -5,11 +5,12 @@
     <title>UR'Plan | Your Personalized, Automated Course Planner 📚</title>
     <!--Setting the core Bootstrap CSS-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel='icon' href='assets/ucr.ico' type='image/x-icon'/>
 
     <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
     <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+    
     <link href="index.css" rel="stylesheet">
+    <link rel='icon' href='assets/ucr.ico' type='image/x-icon'/>
 </head>
 <body class="text-center">    
     <nav class="navbar fixed-top navbar-light" style="background-color:rgba(202, 229, 255, 0.8);">
@@ -31,8 +32,7 @@
     <div id="signIn">
         <h1>Login</h1>
         <h2>Start building your course plan.</h2><br> 
-        <div id="firebaseui-auth-container"></div>
-        <div id="loader">Loading...</div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="googleSignIn()">Get Started</button>
     </div>
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
@@ -46,7 +46,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-auth.js"></script>
 
     <script>
-        // Your web app's Firebase configuration
+        // Your web app's Firebase configuration -- TODO: only auth ucr accounts
         var firebaseConfig = {
             apiKey: "AIzaSyAITqYy9_z2PlI_MICO1Ob-Ay18mWx6qmk",
             authDomain: "ur-plan.firebaseapp.com",
@@ -61,48 +61,29 @@
         firebase.initializeApp(firebaseConfig);
         firebase.analytics();
 
-        var ui = new firebaseui.auth.AuthUI(firebase.auth());
+        var provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope('https://www.googleapis.com/auth/calendar');
 
-        ui.start('#firebaseui-auth-container', {
-            signInOptions: [
-                {
-                    provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                    scopes: [
-                        'https://www.googleapis.com/auth/calendar'
-                    ],
+        function googleSignIn() {
+            firebase.auth().signInWithRedirect(provider);
+        }
+
+        firebase.auth().onAuthStateChanged(user => {
+            firebase.auth().getRedirectResult().then(function(result) {
+                if(result.credential) {
+                    var token = result.credential.accessToken;
+                    console.log("SUCCESS");
                 }
-            ]
-        });
+                var user = result.user;
+            }).catch(function(error) {
+                console.log("ERROR");
+            });
+            
+            if(user) {
+                location.assign('student.html');
+            }
+        })
 
-        var uiConfig = {
-            callbacks: {
-                signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-                    // User successfully signed in.
-                    // Return type determines whether we continue the redirect automatically
-                    // or whether we leave that to developer to handle.
-                    return true;
-                },
-                uiShown: function() {
-                    // The widget is rendered.
-                    // Hide the loader.
-                    document.getElementById('loader').style.display = 'none';
-                }
-            },
-            // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
-            signInFlow: 'popup',
-            signInSuccessUrl: 'student.html',
-            signInOptions: [
-                // Leave the lines as is for the providers you want to offer your users.
-                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-            ],
-            // Terms of service url.
-            tosUrl: '<your-tos-url>',
-            // Privacy policy url.
-            privacyPolicyUrl: '<your-privacy-policy-url>'
-        };
-
-        // The start method will wait until the DOM is loaded.
-        ui.start('#firebaseui-auth-container', uiConfig);
     </script>
 
 </body>

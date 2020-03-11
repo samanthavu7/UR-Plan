@@ -5,9 +5,44 @@
     <title>Homepage | UR'Plan</title>
     <!--Setting the core Bootstrap CSS-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+    
     <link href="student.css" rel="stylesheet">
 </head>
 <body class="text-center">
+    <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-auth.js"></script>
+
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyAITqYy9_z2PlI_MICO1Ob-Ay18mWx6qmk",
+            authDomain: "ur-plan.firebaseapp.com/student.html",
+            databaseURL: "https://ur-plan.firebaseio.com",
+            projectId: "ur-plan",
+            storageBucket: "ur-plan.appspot.com",
+            messagingSenderId: "893010591089",
+            appId: "1:893010591089:web:c039574c91b33876768ad0",
+            measurementId: "G-HRDWGFW0QW"
+        };
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
+        console.log("FIREBASE INITIALIZED");
+        console.log(firebase.auth().currentUser);
+        
+        function googleSignOut() {
+            firebase.auth.signOut().then(function() {
+                location.assign("index.html");
+            }).catch(function(error) {
+                location.assign("404.html");
+            });
+        }
+    
+    </script>
+    
     <div id="myResourcesNav" class="leftsidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeResourcesNav()">&times;</a>
         <p-big>Resources</p-big><br>
@@ -57,6 +92,7 @@
         <h1 class="h3 mb-3 font-weight-normal">Welcome [StudentName]!</h1>
         <button class="btn btn-secondary" type="submit" onclick="openResourcesNav()">Resources</button>
         <button class="btn btn-secondary" type="submit" onclick="openPreferencesNav()">Preferences</button>
+        <button class="btn btn-secondary" type="submit" onclick="googleSignOut()">Sign Out</button>
         <iframe id="calendar" src="" style="border-width:0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
     </div>
     
@@ -84,33 +120,7 @@
 
         userEmail = "samanthavu.7@gmail.com";
         document.getElementById("calendar").src = "https://www.google.com/calendar/embed?src=" + userEmail + "&ctz=America%2FLosAngeles";      
-    </script>
 
-    <script>
-        var provider = new firebase.auth.GoogleAuthProvider();
-        provider.addScope('https://www.googleapis.com/auth/calendar');
-        firebase.auth().useDeviceLanguage();
-        provider.setCustomParameters({
-            'login_hint': 'user@ucr.edu'
-        });
-        firebase.auth().signInWithPopup(provider).then(function(result) {
-            if (result.credential) {
-                // This gives you a Google Access Token. You can use it to access the Google API.
-                var token = result.credential.accessToken;
-                // ...
-            }
-            // The signed-in user info.
-            var user = result.user;
-        }).catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // The email of the user's account used.
-            var email = error.email;
-            // The firebase.auth.AuthCredential type that was used.
-            var credential = error.credential;
-            // ...
-        });
     </script>
 
 </body>
