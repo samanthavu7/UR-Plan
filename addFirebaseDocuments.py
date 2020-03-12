@@ -1,7 +1,7 @@
 #Function that adds documents to Firebase collection
 class Class(object):
     def __init__(self, courseName, classType, sectionNum, CRN, startTime, endTime, days,
-                classLoc, seatsOpen, seatsActual, creditAmt, prof,isUpperDiv, quarterOffered, preReqClasses=[], preReqFor=[], fulfillsReq=[]):
+                classLoc, seatsOpen, seatsActual, creditAmt, prof,isUpperDiv, quarterOffered, preReqClasses=[], preReqFor=[], fulfillsReq=[], linkedSections=[]):
         self.courseName = courseName
         self.classType = classType
         self.sectionNum = sectionNum
@@ -19,13 +19,14 @@ class Class(object):
         self.preReqClasses = preReqClasses
         self.preReqFor = preReqFor
         self.fulfillsReq = fulfillsReq
+        self.linkedSections = linkedSections
 
     @staticmethod
     def from_dict(source):
         
         c = Class(source[u'courseName'], source[u'classType'], source[u'sectionNum'], source[u'CRN'], source[u'startTime'],
                  source[u'endTime'], source[u'days'], source[u'classLoc'], source[u'seatsOpen'], source[u'seatsActual'], source[u'creditAmt'],
-                 source[u'prof'], source[u'isUpperDiv'], source[u'quarterOffered'], source[u'preReqClasses'], source[u'preReqFor'], source[u'fulfillsReq'])
+                 source[u'prof'], source[u'isUpperDiv'], source[u'quarterOffered'], source[u'preReqClasses'], source[u'preReqFor'], source[u'fulfillsReq'], source[u'linkedSections'])
         return c
         
 
@@ -48,16 +49,17 @@ class Class(object):
             u'quarterOffered': self.quarterOffered,
             u'preReqClasses': self.preReqClasses,
             u'preReqFor': self.preReqFor,
-            u'fulfillsReq': self.fulfillsReq
+            u'fulfillsReq': self.fulfillsReq,
+            u'linkedSections': self.linkedSections
         }
         return dest
         
 
     def __repr__(self):
-        return(u'Class(courseName={}, classType={}, sectionNum={}, CRN={}, startTime={}, endTime={}, days={}, classLoc={}, seatsOpen={}, seatsActual={}, creditAmt={}, prof={}, isUpperDiv={}, quarterOffered={}, preReqClasses={}, preReqFor={}, fulfillsReq={})'
+        return(u'Class(courseName={}, classType={}, sectionNum={}, CRN={}, startTime={}, endTime={}, days={}, classLoc={}, seatsOpen={}, seatsActual={}, creditAmt={}, prof={}, isUpperDiv={}, quarterOffered={}, preReqClasses={}, preReqFor={}, fulfillsReq={}, linkedSections={})'
                .format(self.courseName, self.classType, self.sectionNum, self.CRN, self.startTime, self.endTime, self.days,
                       self.classLoc, self.seatsOpen, self.seatsActual, self.creditAmt, self.prof, self.isUpperDiv, 
-                      self.quarterOffered, self.preReqClasses, self.preReqFor, self.fulfillsReq))
+                      self.quarterOffered, self.preReqClasses, self.preReqFor, self.fulfillsReq, self.linkedSections))
 
 userOption = input("-----Press any key to enter new class. ('q' to quit)-----: ")
 while(userOption != 'q'):
@@ -85,26 +87,42 @@ while(userOption != 'q'):
         classUpperDiv = False
     classQuarters = input("Enter quarters offered (Fall and Winter enter as 'FW' or 'SU' for spring and summer for example): ")
     classPreReq = []
-    userOption3 = input("Enter classPreReqs (CS010, CS100), if any (enter 'q' to quit):")
-    while(userOption3 != "q"):
-        classPreReq.append(userOption3)
-        userOption3 = input("Enter classPreReqs (CS010, CS100), if any (enter 'q' to quit):")
+    if(classTyping == "LEC"):
+        userOption3 = input("Enter classPreReqs to take this class (CS010, CS100), if any (enter 'q' to quit):")
+    
+        while(userOption3 != "q"):
+            classPreReq.append(userOption3)
+            print("Entered: " + userOption3)
+            print(classPreReq)
+            userOption3 = input("Enter add. classPreReqs to take this class (CS010, CS100), if any (enter 'q' to quit):")
 
-    classReqFor = []
-    userOption4 = input("Enter classes this class is a preReq. for, if any (enter 'q' to quit): ")
-    while(userOption4 != "q"):
-        classReqFor.append(userOption4)
+        classReqFor = []
         userOption4 = input("Enter classes this class is a preReq. for, if any (enter 'q' to quit): ")
+        while(userOption4 != "q"):
+            classReqFor.append(userOption4)
+            print("Entered: " + userOption4)
+            print(classReqFor)
+            userOption4 = input("Enter add. classes this class is a preReq. for, if any (enter 'q' to quit): ")
+    else:
+        classReqFor = []
 
     classFulfills = []
     userOption5 = input("Enter requirements this class fulfills, if any (enter 'q' to quit): ")
     while(userOption5 != "q"):
         classFulfills.append(userOption5)
-        userOption5 = input("Enter requirements this class fulfills, if any (enter 'q' to quit): ")
+        print(classFulfills)
+        userOption5 = input("Enter add. requirements this class fulfills, if any (enter 'q' to quit): ")
+    linkedClasses = []
+    userOptions6 = input("Enter linked section CRNs. ('q' to quit): ")
+    while(userOptions6 != "q"):
+        linkedClasses.append(userOptions6)
+        print(linkedClasses)
+        userOptions6 = input("Enter add. linked section CRNs. ('q' to quit): ")
+
     potentialClass = Class(courseName=className, classType=classTyping, sectionNum=classSection, CRN=classCRN, startTime=classStartTime, 
                            endTime=classEndTime, days=classDays, classLoc=classLocation, seatsOpen=classSeatsActual, seatsActual=classSeatsActual,
                            creditAmt=classCredit, prof=classProf, isUpperDiv=classUpperDiv, quarterOffered=classQuarters, preReqClasses=classPreReq,
-                           preReqFor=classReqFor,fulfillsReq=classFulfills)
+                           preReqFor=classReqFor,fulfillsReq=classFulfills, linkedSections=linkedClasses)
     db.collection(u'classes').document(str(classCRN)).set(potentialClass.to_dict())
     print("Added new class to collection in Firebase.")
     userOption = input("+++++Press any key to enter another class. (or 'q' to quit)+++++: ")
