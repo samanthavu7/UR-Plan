@@ -5,10 +5,6 @@
     <title>UR'Plan | Your Personalized, Automated Course Planner 📚</title>
     <!--Setting the core Bootstrap CSS-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
-    
     <link href="index.css" rel="stylesheet">
     <link rel='icon' href='assets/ucr.ico' type='image/x-icon'/>
 </head>
@@ -32,13 +28,57 @@
     <div id="signIn">
         <h1>Login</h1>
         <h2>Start building your course plan.</h2><br> 
-        <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="googleSignIn()">Get Started</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" id="signinButton">Get Started</button>
     </div>
 
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script async defer src="https://apis.google.com/js/api.js"
+        onload="this.onload=function(){};handleClientLoad()"
+        onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+
+    <script>
+        function handleClientLoad() {
+            gapi.load('client:auth2', initClient);
+        }
+
+        function initClient() {
+            gapi.client.init({
+                apiKey: "AIzaSyDz0gR_sgfUeTuXEfkCn5t79qYhBO1hakI",
+                clientId: "302327930081-ijcupmhamhanidi156eh0gmjq4idr650.apps.googleusercontent.com",
+                discoveryDocs: [
+                    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+                ],
+                scope: "https://www.googleapis.com/auth/calendar"
+            }).then(function () {
+                gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+                updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+                signinButton.onclick = handleSignIn;
+            }, function(error) {
+                appendPre(JSON.stringify(error, null, 2));
+            });
+        }
+
+        function updateSigninStatus(isSignedIn) {
+            var googleUser = gapi.auth2.getAuthInstance().currentUser.get();
+            if (isSignedIn) {
+                var idToken = googleUser.getAuthResponse().id_token;
+                var creds = firebase.auth.GoogleAuthProvider.credential(idToken);
+                firebase.auth().signInWithCredential(creds);
+            } else {
+                // do nothing for now
+            }
+        }
+
+        function handleSignIn(event) {
+            gapi.auth2.getAuthInstance().signIn();
+        }
+
+    </script>
+
+    <!-- Firebase JS SDK -->
     <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
 
-    <!-- TODO: Add SDKs for Firebase products that you want to use
+    <!-- Add SDKs for Firebase products that you want to use
     https://firebase.google.com/docs/web/setup#available-libraries -->
     <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-analytics.js"></script>
 
@@ -61,28 +101,11 @@
         firebase.initializeApp(firebaseConfig);
         firebase.analytics();
 
-        var provider = new firebase.auth.GoogleAuthProvider();
-        provider.addScope('https://www.googleapis.com/auth/calendar');
-
-        function googleSignIn() {
-            firebase.auth().signInWithRedirect(provider);
-        }
-
-        firebase.auth().onAuthStateChanged(user => {
-            firebase.auth().getRedirectResult().then(function(result) {
-                if(result.credential) {
-                    var token = result.credential.accessToken;
-                    console.log("SUCCESS");
-                }
-                var user = result.user;
-            }).catch(function(error) {
-                console.log("ERROR");
-            });
-            
+        firebase.auth().onAuthStateChanged(function(user) {            
             if(user) {
                 location.assign('student.html');
             }
-        })
+        });
 
     </script>
 
