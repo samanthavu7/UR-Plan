@@ -8,6 +8,23 @@
     <link href="student.css" rel="stylesheet">
 </head>
 <body class="text-center">    
+    <nav class="navbar fixed-top navbar-light" style="background-color:rgba(202, 229, 255, 0.8);">
+        <div class="container-fluid" style="display:flex; justify-content: space-between;">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <img src="assets/urplan.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                UR'Plan
+            </a>
+          </div>
+          <div class="navbar-text">
+            <h1 id="welcome" style="color:#585757; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: 25px; font-weight: bold;"></h1>
+          </div>
+          <div class="right">
+            <button class="btn btn-outline-primary" type="button" id="signoutButton">Sign Out</button>
+          </div>
+        </div>
+    </nav>
+    
     <div id="myResourcesNav" class="leftsidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeResourcesNav()">&times;</a>
         <p-big>Resources</p-big><br>
@@ -54,16 +71,14 @@
 
     <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
     <div id="main">
-        <h1 class="h3 mb-3 font-weight-normal" id="welcome"></h1>
         <button class="btn btn-secondary" type="submit" onclick="openResourcesNav()">Resources</button>
-        <button class="btn btn-secondary" type="submit" onclick="openPreferencesNav()">Preferences</button>
-        <button class="btn btn-secondary" type="submit" id="signoutButton">Sign Out</button>
-        <iframe id="calendar" src="" style="border-width:0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+        <button class="btn btn-secondary" type="submit" onclick="openPreferencesNav()">Preferences</button>      
+        <iframe id="calendar" src="" style="border-width:0;" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
     </div>
     
-    <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-analytics.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.11.0/firebase-auth.js"></script>
 
     <script>
         var firebaseConfig = {
@@ -111,7 +126,7 @@
                 updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
                 signoutButton.onclick = handleSignOut;
             }, function(error) {
-                appendPre(JSON.stringify(error, null, 2));
+                console.log(JSON.stringify(error, null, 2));
             });
         }
 
@@ -168,10 +183,12 @@
                         var calendar = calendars[i];
                         calendarIdsString += "&src=" + calendar.id + "&amp;";
                     }
+                    calendarIdsString = calendarIdsString.replace(/@/g, '%40');
+                    calendarIdsString = calendarIdsString.replace(/#/g, '%23');
+                    document.getElementById("calendar").src = "https://www.google.com/calendar/embed?" + calendarIdsString + "&ctz=America%2FLosAngeles&amp;&mode=WEEK"; //colors?
                 } else {
-                    // do nothing for now.
+                    document.getElementById("calendar").src = "https://www.google.com/calendar";
                 }
-                document.getElementById("calendar").src = "https://www.google.com/calendar/embed?" + calendarIdsString + "&ctz=America%2FLosAngeles&amp;&mode=WEEK"; //colors?
             });
         }
               
