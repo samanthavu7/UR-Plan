@@ -1,31 +1,39 @@
+"""
+This is a module that defines the class structure.
+Current version 0.3 - Changed days class variable to five Boolean variables
+representing the days of the week. As well, removed static information from 
+Class class, will store instead in another file
+"""
 class Class(object):
-    def __init__(self, courseName, classType, sectionNum, CRN, startTime, endTime, days,
-                classLoc, seatsOpen, seatsActual, creditAmt, prof,isUpperDiv, quarterOffered, preReqClasses=[], preReqFor=[], fulfillsReq=[], linkedSections=[]):
+    def __init__(self, courseName, classType, sectionNum, CRN, startTime, endTime, meetsOnMonday, meetsOnTuesday, 
+                 meetsOnWednesday, meetsOnThursday, meetsOnFriday, classLoc, seatsOpen, seatsActual, creditAmt,
+                prof, linkedSections=[]):
         self.courseName = courseName
         self.classType = classType
         self.sectionNum = sectionNum
         self.CRN = CRN
         self.startTime = startTime
         self.endTime = endTime
-        self.days = days
+        self.meetsOnMonday = meetsOnMonday
+        self.meetsOnTuesday = meetsOnTuesday
+        self.meetsOnWednesday = meetsOnWednesday
+        self.meetsOnThursday = meetsOnThursday
+        self.meetsOnFriday = meetsOnFriday
         self.classLoc = classLoc
         self.seatsOpen = seatsOpen
         self.seatsActual = seatsActual
         self.creditAmt = creditAmt
         self.prof = prof
-        self.isUpperDiv = isUpperDiv
-        self.quarterOffered = quarterOffered
-        self.preReqClasses = preReqClasses
-        self.preReqFor = preReqFor
-        self.fulfillsReq = fulfillsReq
         self.linkedSections = linkedSections
 
     @staticmethod
     def from_dict(source):
         
-        c = Class(source[u'courseName'], source[u'classType'], source[u'sectionNum'], source[u'CRN'], source[u'startTime'],
-                 source[u'endTime'], source[u'days'], source[u'classLoc'], source[u'seatsOpen'], source[u'seatsActual'], source[u'creditAmt'],
-                 source[u'prof'], source[u'isUpperDiv'], source[u'quarterOffered'], source[u'preReqClasses'], source[u'preReqFor'], source[u'fulfillsReq'], source[u'linkedSections'])
+        c = Class(source[u'courseName'], source[u'classType'], source[u'sectionNum'], source[u'CRN'], 
+                  source[u'startTime'], source[u'endTime'], source[u'meetsOnMonday'], 
+                  source[u'meetsOnTuesday'], source[u'meetsOnWednesday'], source[u'meetsOnThursday'], 
+                  source[u'meetsOnFriday'], source[u'classLoc'], source[u'seatsOpen'], 
+                  source[u'seatsActual'], source[u'creditAmt'], source[u'prof'], source[u'linkedSections'])
         return c
         
 
@@ -38,27 +46,27 @@ class Class(object):
             u'CRN': self.CRN,
             u'startTime': self.startTime,
             u'endTime': self.endTime,
-            u'days': self.days,
+            u'meetsOnMonday': self.meetsOnMonday,
+            u'meetsOnTuesday': self.meetsOnTuesday,
+            u'meetsOnWednesday': self.meetsOnWednesday,
+            u'meetsOnThursday': self.meetsOnThursday,
+            u'meetsOnFriday': self.meetsOnFriday,
             u'classLoc': self.classLoc,
             u'seatsOpen': self.seatsOpen,
             u'seatsActual': self.seatsActual,
             u'creditAmt': self.creditAmt,
             u'prof': self.prof,
-            u'isUpperDiv': self.isUpperDiv,
-            u'quarterOffered': self.quarterOffered,
-            u'preReqClasses': self.preReqClasses,
-            u'preReqFor': self.preReqFor,
-            u'fulfillsReq': self.fulfillsReq,
             u'linkedSections': self.linkedSections
         }
         return dest
         
 
     def __repr__(self):
-        return(u'Class(courseName={}, classType={}, sectionNum={}, CRN={}, startTime={}, endTime={}, days={}, classLoc={}, seatsOpen={}, seatsActual={}, creditAmt={}, prof={}, isUpperDiv={}, quarterOffered={}, preReqClasses={}, preReqFor={}, fulfillsReq={}, linkedSections={})'
-               .format(self.courseName, self.classType, self.sectionNum, self.CRN, self.startTime, self.endTime, self.days,
-                      self.classLoc, self.seatsOpen, self.seatsActual, self.creditAmt, self.prof, self.isUpperDiv, 
-                      self.quarterOffered, self.preReqClasses, self.preReqFor, self.fulfillsReq, self.linkedSections))
+        return(u'Class(courseName={}, classType={}, sectionNum={}, CRN={}, startTime={}, endTime={}, meetsOnMonday={}, meetsOnTuesday={}, meetsOnWednesday={}, meetsOnThursday={}, meetsOnFriday={}, classLoc={}, seatsOpen={}, seatsActual={}, creditAmt={}, prof={}, linkedSections={})'
+               .format(self.courseName, self.classType, self.sectionNum, self.CRN, self.startTime, self.endTime,
+                       self.meetsOnMonday, self.meetsOnTuesday, self.meetsOnWednesday, self.meetsOnThursday,
+                      self.meetsOnFriday,self.classLoc, self.seatsOpen, self.seatsActual, self.creditAmt,
+                     self.prof, self.linkedSections))
 
 class Student(object):
     def __init__(self, firstName, lastName, major, year=0, prefClassesLimit=4, prefStartTime=8000, prefEndTime=2200, prefDays="MTWRF", coursesList=[]):

@@ -1,65 +1,5 @@
 #Function that adds documents to Firebase collection
-class Class(object):
-    def __init__(self, courseName, classType, sectionNum, CRN, startTime, endTime, days,
-                classLoc, seatsOpen, seatsActual, creditAmt, prof,isUpperDiv, quarterOffered, preReqClasses=[], preReqFor=[], fulfillsReq=[], linkedSections=[]):
-        self.courseName = courseName
-        self.classType = classType
-        self.sectionNum = sectionNum
-        self.CRN = CRN
-        self.startTime = startTime
-        self.endTime = endTime
-        self.days = days
-        self.classLoc = classLoc
-        self.seatsOpen = seatsOpen
-        self.seatsActual = seatsActual
-        self.creditAmt = creditAmt
-        self.prof = prof
-        self.isUpperDiv = isUpperDiv
-        self.quarterOffered = quarterOffered
-        self.preReqClasses = preReqClasses
-        self.preReqFor = preReqFor
-        self.fulfillsReq = fulfillsReq
-        self.linkedSections = linkedSections
-
-    @staticmethod
-    def from_dict(source):
-        
-        c = Class(source[u'courseName'], source[u'classType'], source[u'sectionNum'], source[u'CRN'], source[u'startTime'],
-                 source[u'endTime'], source[u'days'], source[u'classLoc'], source[u'seatsOpen'], source[u'seatsActual'], source[u'creditAmt'],
-                 source[u'prof'], source[u'isUpperDiv'], source[u'quarterOffered'], source[u'preReqClasses'], source[u'preReqFor'], source[u'fulfillsReq'], source[u'linkedSections'])
-        return c
-        
-
-    def to_dict(self):
-        
-        dest = {
-            u'courseName': self.courseName,
-            u'classType': self.classType,
-            u'sectionNum': self.sectionNum,
-            u'CRN': self.CRN,
-            u'startTime': self.startTime,
-            u'endTime': self.endTime,
-            u'days': self.days,
-            u'classLoc': self.classLoc,
-            u'seatsOpen': self.seatsOpen,
-            u'seatsActual': self.seatsActual,
-            u'creditAmt': self.creditAmt,
-            u'prof': self.prof,
-            u'isUpperDiv': self.isUpperDiv,
-            u'quarterOffered': self.quarterOffered,
-            u'preReqClasses': self.preReqClasses,
-            u'preReqFor': self.preReqFor,
-            u'fulfillsReq': self.fulfillsReq,
-            u'linkedSections': self.linkedSections
-        }
-        return dest
-        
-
-    def __repr__(self):
-        return(u'Class(courseName={}, classType={}, sectionNum={}, CRN={}, startTime={}, endTime={}, days={}, classLoc={}, seatsOpen={}, seatsActual={}, creditAmt={}, prof={}, isUpperDiv={}, quarterOffered={}, preReqClasses={}, preReqFor={}, fulfillsReq={}, linkedSections={})'
-               .format(self.courseName, self.classType, self.sectionNum, self.CRN, self.startTime, self.endTime, self.days,
-                      self.classLoc, self.seatsOpen, self.seatsActual, self.creditAmt, self.prof, self.isUpperDiv, 
-                      self.quarterOffered, self.preReqClasses, self.preReqFor, self.fulfillsReq, self.linkedSections))
+from URPlanClasses import Class
 
 userOption = input("-----Press any key to enter new class. ('q' to quit)-----: ")
 while(userOption != 'q'):
@@ -73,45 +13,28 @@ while(userOption != 'q'):
     classStartTime = int(classStartTime)
     classEndTime = input("Enter class end time (24 hour format, 1:37 entered as 1337): ")
     classEndTime = int(classEndTime)
+    willMeetMondays = False
+    willMeetTuesdays = False
+    willMeetWednesdays = False
+    willMeetThursdays = False
+    willMeetFridays = False
     classDays = input("Enter class days (Classes that meet on Tues & Thurs enter as TR, Mon Wed and Fri as MWF): ")
+    if('M' in classDays):
+        willMeetMondays = True
+    if('T' in classDays):
+        willMeetTuesdays = True
+    if('W' in classDays):
+        willMeetWednesdays = True
+    if('R' in classDays):
+        willMeetThursdays = True
+    if('F' in classDays):
+        willMeetFridays = True
     classLocation = input("Enter class location: ")
     classSeatsActual = input("Enter amount of seats in class: ")
     classSeatsActual = int(classSeatsActual)
     classCredit = input("Enter number of credits class is worth: ")
     classCredit = int(classCredit)
     classProf = input("Enter last name of professor: ")
-    userOption2 = input("Is an upper division course? ('y' or 'n'): ")
-    if(userOption2 == 'y'):
-        classUpperDiv = True
-    else:
-        classUpperDiv = False
-    classQuarters = input("Enter quarters offered (Fall and Winter enter as 'FW' or 'SU' for spring and summer for example): ")
-    classPreReq = []
-    if(classTyping == "LEC"):
-        userOption3 = input("Enter classPreReqs to take this class (CS010, CS100), if any (enter 'q' to quit):")
-    
-        while(userOption3 != "q"):
-            classPreReq.append(userOption3)
-            print("Entered: " + userOption3)
-            print(classPreReq)
-            userOption3 = input("Enter add. classPreReqs to take this class (CS010, CS100), if any (enter 'q' to quit):")
-
-        classReqFor = []
-        userOption4 = input("Enter classes this class is a preReq. for, if any (enter 'q' to quit): ")
-        while(userOption4 != "q"):
-            classReqFor.append(userOption4)
-            print("Entered: " + userOption4)
-            print(classReqFor)
-            userOption4 = input("Enter add. classes this class is a preReq. for, if any (enter 'q' to quit): ")
-    else:
-        classReqFor = []
-
-    classFulfills = []
-    userOption5 = input("Enter requirements this class fulfills, if any (enter 'q' to quit): ")
-    while(userOption5 != "q"):
-        classFulfills.append(userOption5)
-        print(classFulfills)
-        userOption5 = input("Enter add. requirements this class fulfills, if any (enter 'q' to quit): ")
     linkedClasses = []
     userOptions6 = input("Enter linked section CRNs. ('q' to quit): ")
     while(userOptions6 != "q"):
@@ -119,10 +42,12 @@ while(userOption != 'q'):
         print(linkedClasses)
         userOptions6 = input("Enter add. linked section CRNs. ('q' to quit): ")
 
-    potentialClass = Class(courseName=className, classType=classTyping, sectionNum=classSection, CRN=classCRN, startTime=classStartTime, 
-                           endTime=classEndTime, days=classDays, classLoc=classLocation, seatsOpen=classSeatsActual, seatsActual=classSeatsActual,
-                           creditAmt=classCredit, prof=classProf, isUpperDiv=classUpperDiv, quarterOffered=classQuarters, preReqClasses=classPreReq,
-                           preReqFor=classReqFor,fulfillsReq=classFulfills, linkedSections=linkedClasses)
+    potentialClass = Class(courseName=className, classType=classTyping, sectionNum=classSection,
+                          CRN=classCRN, startTime=classStartTime, endTime=classEndTime, meetsOnMonday=willMeetMondays,
+                         meetsOnTuesday=willMeetTuesdays, meetsOnWednesday=willMeetWednesdays, meetsOnThursday=willMeetThursdays,
+                        meetsOnFriday=willMeetFridays, classLoc=classLocation, seatsOpen=classSeatsActual,
+                       seatsActual=classSeatsActual, creditAmt=classCredit, prof=classProf, linkedSections=linkedClasses)
+    print("Pass")
     db.collection(u'classes').document(str(classCRN)).set(potentialClass.to_dict())
     print("Added new class to collection in Firebase.")
     userOption = input("+++++Press any key to enter another class. (or 'q' to quit)+++++: ")
