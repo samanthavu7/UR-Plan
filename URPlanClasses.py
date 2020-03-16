@@ -69,25 +69,35 @@ class Class(object):
                      self.prof, self.linkedSections))
 
 class Student(object):
-    def __init__(self, firstName, lastName, major, year=0, prefClassesLimit=4, prefStartTime=8000, prefEndTime=2200, prefDays="MTWRF", coursesList=[]):
+    def __init__(self, firstName, lastName, major, studentEmail, year=0, prefClassesLimit=4, prefStartTime=8000, 
+                 prefEndTime=2200, classesOnMonday=True, classesOnTuesday=True, classesOnWednesday=True, 
+                 classesOnThursday=True, classesOnFriday=True, coursesList=[]):
         #algorithm for class selection can first compare a student class's preferences against
         #default values. When a particular value is different from default, only then will it
         #be used as an element in a query to classes database.  
         self.firstName = firstName
         self.lastName = lastName
         self.major = major
+        self.studentEmail = studentEmail
         self.year = year
         self.prefClassesLimit = prefClassesLimit #default is 4 class limit
         self.prefStartTime = prefStartTime
         self.prefEndTime = prefEndTime
-        self.prefDays = prefDays
+        self.classesOnMonday = classesOnMonday
+        self.classesOnTuesday = classesOnTuesday
+        self.classesOnWednesday = classesOnWednesday
+        self.classesOnThursday = classesOnThursday
+        self.classesOnFriday = classesOnFriday
         self.coursesList = coursesList
+       
 
     @staticmethod
     def from_dict(source):
         
-        s = Student(source[u'firstName'], source[u'lastName'], source[u'major'], source[u'year'], source[u'prefClassesLimit'], source[u'prefStartTime'], source[u'prefEndTime'],
-                    source[u'prefDays'], source[u'coursesList'])
+        s = Student(source[u'firstName'], source[u'lastName'], source[u'major'], source[u'studentEmail'], 
+                    source[u'year'], source[u'prefClassesLimit'], source[u'prefStartTime'], source[u'prefEndTime'], 
+                    source[u'classesOnMonday'], source[u'classesOnTuesday'], source[u'classesOnWednesday'], 
+                    source[u'classesOnThursday'], source[u'classesOnFriday'], source[u'coursesList'])
         return s
         
 
@@ -97,17 +107,25 @@ class Student(object):
             u'firstName': self.firstName,
             u'lastName': self.lastName,
             u'major': self.major,
+            u'studentEmail': self.studentEmail,
             u'year': self.year,
             u'prefClassesLimit': self.prefClassesLimit,
             u'prefStartTime': self.prefStartTime,
             u'prefEndTime': self.prefEndTime,
-            u'prefDays': self.prefDays,
+            u'classesOnMonday': self.classesOnMonday, 
+            u'classesOnTuesday': self.classesOnTuesday,
+            u'classesOnWednesday': self.classesOnWednesday,
+            u'classesOnThursday': self.classesOnThursday,
+            u'classesOnFriday': self.classesOnFriday,
             u'coursesList': self.coursesList
         }
         return dest
         
 
     def __repr__(self):
-        return(u'Student(firstName={}, lastName={}, major={}, year={}, prefClassesLimit={}, prefStartTime={}, prefEndTime={}, prefDays={}, coursesList={})'
+        return(u'Student(firstName={}, lastName={}, major={}, studentEmail={}, year={}, prefClassesLimit={}, prefStartTime={}, prefEndTime={}, classesOnMonday={}, classesOnTuesday={}, classesOnWednesday={}, classesOnThursday={}, classesOnFriday={}, coursesList={})'
                .format(self.firstName, self.lastName, self.major, 
-                       self.year, self.prefClassesLimit, self.prefStartTime, self.prefEndTime, self.prefDays, self.coursesList))
+                       self.studentEmail, self.year, self.prefClassesLimit, self.prefStartTime, 
+                       self.prefEndTime, self.classesOnMonday, self.classesOnTuesday, 
+                       self.classesOnWednesday, self.classesOnThursday, self.classesOnFriday, 
+                       self.coursesList))
