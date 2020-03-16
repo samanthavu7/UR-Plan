@@ -66,7 +66,7 @@
             <input type="number" id="quantity" name="quantity" min="1" max="5" value="4"><br><br><br>
         </form>
 
-        <input type="submit" value="Generate my Term Plan!">
+        <input type="submit" onclick="createCalendar()" value="Generate my Term Plan!">
     </div>
 
     <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
@@ -181,17 +181,66 @@
                 if (calendars.length > 0) { 
                     for (i = 0; i < calendars.length; i++) {
                         var calendar = calendars[i];
-                        calendarIdsString += "&src=" + calendar.id + "&amp;";
+                        calendarIdsString += "&src=" + calendar.id + "&amp;&color=" + calendar.backgroundColor + "&amp;";
                     }
                     calendarIdsString = calendarIdsString.replace(/@/g, '%40');
                     calendarIdsString = calendarIdsString.replace(/#/g, '%23');
                     document.getElementById("calendar").src = "https://www.google.com/calendar/embed?" + calendarIdsString + "&ctz=America%2FLosAngeles&amp;&mode=WEEK"; //colors?
                 } else {
-                    document.getElementById("calendar").src = "https://www.google.com/calendar";
+                    // document.getElementById("calendar").src = "https://www.google.com/calendar";
                 }
             });
-        }
-              
+        }  
+
+        function createCalendar() {
+            gapi.client.calendar.calendars.insert({
+                "resource": {
+                    "summary": "Spring 2020 Classes"
+                }
+            })
+            .then(function(response) {
+                embedCalendars();
+
+                var pre = document.getElementById('main');
+                var instruction1 = document.createTextNode("Click your desired classes and/or sections to display them.");
+                pre.appendChild(instruction1);
+                var newline1 = document.createElement('br');
+                pre.appendChild(newline1);
+                var instruction2 = document.createTextNode("Courses can then be copied to your R'Calendar by clicking on the generated Google Calendar event.");
+                pre.appendChild(instruction2);
+                var newline2 = document.createElement('br');
+                pre.appendChild(newline2);                
+
+                var a = document.createElement('a');
+                var classLink = document.createTextNode("CS 141 Lecture T,R 13:00-14:30PM");
+                a.appendChild(classLink);
+                a.href = "javascript:void(0)";
+                a.onclick = function() {
+                    gapi.client.calendar.events.insert({
+                        "calendarId": response.result.id,
+                        "resource": {
+                            "summary": "CS 141 Lecture",
+                            "start": {
+                                "dateTime": "2020-03-17T13:00:00",
+                                "timeZone": "America/Los_Angeles"
+                            },
+                            "end": {
+                                "dateTime": "2020-03-17T14:30:00",
+                                "timeZone": "America/Los_Angeles"
+                            },
+                            "recurrence": [
+                                "RRULE:FREQ=WEEKLY;UNTIL=20200320T220000Z;BYDAY=TU,TH"
+                            ]
+                        }
+                    })
+                    .then(function(response) {
+                        embedCalendars();
+                    });
+                }
+                pre.appendChild(a);
+
+            });
+        }   
         
     </script>
 
