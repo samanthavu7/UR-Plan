@@ -30,6 +30,18 @@ from designProjectScratch import initCSNonCoreClasses
 #except google.cloud.exceptions.NotFound:
 #    print("Document Not Found")
 
+def updateClassesToTake(studentList, classListing):
+    for selClass in studentList:
+        for classObj in classListing[:]:
+            if(selClass == classObj.className):
+                classListing.remove(classObj)
+
+    for selClass in studentList:
+        for classObj in classListing[:]:
+            if(selClass in classObj.preReqtoTake):
+                classObj.preReqtoTake.remove(selClass)
+    return classListing
+
 doc_refStudent = db.collection(u'students').document(u'864651254')
 
 try:
@@ -46,25 +58,28 @@ nonCoreClasses = initCSNonCoreClasses()
 
 classesToQuery = []
 
-for selClass in studentList:
-    for classObj in coreClasses[:]:
-        if(selClass == classObj.className):
-            coreClasses.remove(classObj)
+coreClasses = updateClassesToTake(studentList, coreClasses)
+nonCoreClasses = updateClassesToTake(studentList, nonCoreClasses)
 
-for selClass in studentList:
-    for classObj in nonCoreClasses[:]:
-        if(selClass == classObj.className):
-            nonCoreClasses.remove(classObj)
+#for selClass in studentList:
+#    for classObj in coreClasses[:]:
+#        if(selClass == classObj.className):
+#            coreClasses.remove(classObj)
 
-for selClass in studentList:
-    for classObj in coreClasses[:]:
-        if(selClass in classObj.preReqtoTake):
-            classObj.preReqtoTake.remove(selClass)
+#for selClass in studentList:
+#    for classObj in nonCoreClasses[:]:
+#        if(selClass == classObj.className):
+#            nonCoreClasses.remove(classObj)
 
-for selClass2 in studentList:
-    for classObj2 in nonCoreClasses[:]:
-        if(selClass2 in classObj2.preReqtoTake):
-            classObj2.preReqtoTake.remove(selClass2)
+#for selClass in studentList:
+#    for classObj in coreClasses[:]:
+#        if(selClass in classObj.preReqtoTake):
+#            classObj.preReqtoTake.remove(selClass)
+
+#for selClass2 in studentList:
+#    for classObj2 in nonCoreClasses[:]:
+#        if(selClass2 in classObj2.preReqtoTake):
+#            classObj2.preReqtoTake.remove(selClass2)
 
 print("Core classes that you can take after classes removal: ")
 for classObj in coreClasses:
@@ -78,6 +93,9 @@ for classObj2 in nonCoreClasses:
     if(not classObj2.preReqtoTake):
         print(classObj2.className + " can now be taken!")
         classesToQuery.append(classObj2.className)
+
+
+#Querying is done here.
 
 classes_Ref = db.collection(u'classes')
 queryQueue = []
