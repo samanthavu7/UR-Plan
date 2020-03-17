@@ -3,7 +3,7 @@ class ClassInfo(object):
         self.className = className # Format: CS010 or PHYS040A
         self.quartersOffered = quartersOffered #(F)all, (W)inter, (S)pring, S(U)mmer
         self.yearUsuallyTaken = yearUsuallyTaken
-        self.ofaSeries #CS010 is in a series with CS012 & CS014, PHYS040A w/ PHYS040B, etc.
+        self.ofaSeries = ofaSeries #CS010 is in a series with CS012 & CS014, PHYS040A w/ PHYS040B, etc.
         self.isUpperDiv = isUpperDiv
         self.fulfillsReq = fulfillsReq # CS_MAJOR, CS_CORE, CS_ELECT, ENGR_BREATH, HUM_A, LIFE_SCI, etc are all valid tags
         self.preReqtoTake = preReqtoTake # Theses classes are needed in order to take this class
@@ -11,6 +11,9 @@ class ClassInfo(object):
     def numDescendants(self):
         #gives number of class descendants
         return len(self.isPreReqFor)
+
+    def numPreReq(self):
+        return len(self.preReqtoTake)
 
 def initCSCoreClass():
     #Creates a list of ClassInfo objects that match with core CS class info
@@ -37,15 +40,16 @@ def initCSCoreClass():
     classList.append(ClassInfo("CS161", "FWS", 4, False, True, ["CS_MAJOR", "CS_CORE"], ["CS120B"], []))
     classList.append(ClassInfo("CS152", "FWS", 4, False, True, ["CS_MAJOR", "CS_CORE"],["CS111", "CS150", "CS100"], []))
     classList.append(ClassInfo("CS153", "FWS", 4, False, True, ["CS_MAJOR", "CS_CORE"], ["CS111", "CS061", "CS100"], []))
+    classList.append(ClassInfo("CS000", "FWS", 1, False, False, ["CS_MAJOR", "CS_CORE"], [], []))
     return classList
 
 def initCSNonCoreClasses():
     #Will fill classes like MATH009A, ENGL001A, ENGR001 and/or ENGR180W
     classList2 = []
-    classList.append(ClassInfo("MATH009A", "FWS", 1, True, False, ["CS_MAJOR"], ["MAE"], ["MATH009B", "CS011", "CS031", "MATH010A", 
+    classList2.append(ClassInfo("MATH009A", "FWS", 1, True, False, ["CS_MAJOR"], ["MAE"], ["MATH009B", "CS011", "CS031", "MATH010A", 
                                                                                           "MATH009C", "STAT155", "CS111", "CS150", 
                                                                                           "CS141", "CS152", "CS153"]))
-    classList.append(ClassInfo("MATH009B", "FWS", 1, True, False, ["CS_MAJOR"], ["MATH009A"], ["MATH010A", "MATH009C", "STAT155", 
+    classList2.append(ClassInfo("MATH009B", "FWS", 1, True, False, ["CS_MAJOR"], ["MATH009A"], ["MATH010A", "MATH009C", "STAT155", 
                                                                                                "CS111", "CS150", "CS141", "CS152",
                                                                                               "CS153"]))
     return classList2
@@ -90,3 +94,23 @@ for classObj in csCoreClassList:
     if(not classObj.preReqtoTake):
         print(classObj.className + " can now be taken!")
         print(classObj.className + " is a preReq for " + str(len(classObj.isPreReqFor)) + " classes.")
+        print("------")
+
+
+for selClass in studentList:
+    for classObj in csNonCoreList[:]:
+        if(selClass == classObj.className):
+            csNonCoreList.remove(classObj)
+
+print("In nonCore CS Classes...")
+for selClass2 in studentList:
+    for classObj2 in csNonCoreList[:]:
+        if(selClass2 in classObj2.preReqtoTake):
+            classObj2.preReqtoTake.remove(selClass2)
+print("Classes in nonCore that can be taken")
+
+for classObj2 in csNonCoreList:
+    if(not classObj2.preReqtoTake):
+        print(classObj2.className + " can now be taken!")
+        print(classObj2.className + " is a preReq for " + str(len(classObj2.isPreReqFor)) + " classes.")
+        print("------")

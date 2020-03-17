@@ -61,31 +61,15 @@ classesToQuery = []
 coreClasses = updateClassesToTake(studentList, coreClasses)
 nonCoreClasses = updateClassesToTake(studentList, nonCoreClasses)
 
-#for selClass in studentList:
-#    for classObj in coreClasses[:]:
-#        if(selClass == classObj.className):
-#            coreClasses.remove(classObj)
 
-#for selClass in studentList:
-#    for classObj in nonCoreClasses[:]:
-#        if(selClass == classObj.className):
-#            nonCoreClasses.remove(classObj)
-
-#for selClass in studentList:
-#    for classObj in coreClasses[:]:
-#        if(selClass in classObj.preReqtoTake):
-#            classObj.preReqtoTake.remove(selClass)
-
-#for selClass2 in studentList:
-#    for classObj2 in nonCoreClasses[:]:
-#        if(selClass2 in classObj2.preReqtoTake):
-#            classObj2.preReqtoTake.remove(selClass2)
 
 print("Core classes that you can take after classes removal: ")
 for classObj in coreClasses:
     if(not classObj.preReqtoTake):
         print(classObj.className + " can now be taken!")
         classesToQuery.append(classObj.className)
+    else:
+        print(classObj.className + " has " + str(classObj.numDescendants()) + " descendants.")
 
 print("Classes in nonCore that can be taken")
 
