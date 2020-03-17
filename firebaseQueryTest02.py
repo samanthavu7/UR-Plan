@@ -34,15 +34,25 @@ def getClassesBasedOnTime(preferStartTime, preferEndTime):
 
 def getClassesBasedOnDays(useMondays, useTuesdays, useWednesdays, useThursdays, useFridays):
     classRef2 = db.collection(u'classes').where(u'classType', u'==', u'LEC')
-    if(not useMondays):
+    if(useMondays):
+        classRef2 = classRef2.where(u'meetsOnMonday', u'==', True)
+    else:
         classRef2 = classRef2.where(u'meetsOnMonday', u'==', False)
-    if(not useTuesdays):
+    if(useTuesdays):
+        classRef2 = classRef2.where(u'meetsOnTuesday', u'==', True)
+    else:
         classRef2 = classRef2.where(u'meetsOnTuesday', u'==', False)
-    if(not useWednesdays):
+    if(useWednesdays):
+        classRef2 = classRef2.where(u'meetsOnWednesday', u'==', True)
+    else:
         classRef2 = classRef2.where(u'meetsOnWednesday', u'==', False)
-    if(not useThursdays):
+    if(useThursdays):
+        classRef2 = classRef2.where(u'meetsOnThursday', u'==', True)
+    else:
         classRef2 = classRef2.where(u'meetsOnThursday', u'==', False)
-    if(not useFridays):
+    if(useFridays):
+        classRef2 = classRef2.where(u'meetsOnFriday', u'==', True)
+    else:
         classRef2 = classRef2.where(u'meetsOnFriday', u'==', False)
     try:
         matchTimeClasses = classRef2.stream()
